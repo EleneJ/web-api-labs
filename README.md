@@ -1,3 +1,3 @@
 # web-api-labs
 
-Practice text
+Practical labs for the WAD2 module
