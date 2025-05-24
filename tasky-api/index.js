@@ -4,6 +4,7 @@ import tasksRouter from './api/tasks/index.js';
 import './db';
 import cors from 'cors';
 import usersRouter from './api/users';
+import authenticate from './authenticate';
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-app.use('/api/tasks', tasksRouter);
+app.use('/api/tasks', authenticate, tasksRouter);
 
 app.use('/api/users', usersRouter);
 

@@ -42,7 +42,7 @@ async function authenticateUser(req, res) {
         return res.status(401).json({ success: false, msg: 'Authentication failed. User not found.' });
     }
 
-    const isMatch = await user.comparePassword(req.body.password);
+    const isMatch = await user.comparePassword(String(req.body.password));
     if (isMatch) {
         const token = jwt.sign({ username: user.username }, process.env.SECRET);
         res.status(200).json({ success: true, token: 'BEARER ' + token });
