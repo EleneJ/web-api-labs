@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../api/users/userModel';
 
-const authenticate = async (request, response, next) => {
+const authenticate = async (request, _response, next) => {
     try { 
         const authHeader = request.headers.authorization;
         if (!authHeader) throw new Error('No authorization header');
@@ -12,12 +12,11 @@ const authenticate = async (request, response, next) => {
         const decoded = await jwt.verify(token, process.env.SECRET); 
         console.log(decoded);
 
-        // Assuming decoded contains a username field
         const user = await User.findByUserName(decoded.username); 
         if (!user) {
             throw new Error('User not found');
         }
-        // Optionally attach the user to the request for further use
+
         request.user = user; 
         next();
     } catch(err) {
