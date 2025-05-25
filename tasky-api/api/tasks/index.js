@@ -4,15 +4,18 @@ import asyncHandler from 'express-async-handler';
 
 const router = express.Router(); // eslint-disable-line
 
-// Get all tasks
+// Get a user's tasks
 router.get('/', async (req, res) => {
-    const tasks = await Task.find().populate('userId', 'username');
+    console.log(req.user);
+    const tasks = await Task.find({ userId: `${req.user._id}`});
     res.status(200).json(tasks);
 });
 
 // create a task
 router.post('/', asyncHandler(async (req, res) => {
-    const task = await Task.create(req.body);
+    const newTask = req.body;
+    newTask.userId = req.user._id;
+    const task = await Task(newTask).save();
     res.status(201).json(task);
 }));
 
@@ -31,7 +34,6 @@ router.put('/:id', async (req, res) => {
 
 // delete Task
 router.delete('/:id', async (req, res) => {
-    if (req.body._id) delete req.body._id;
     const result = await Task.deleteOne({
         _id: req.params.id,
     });
